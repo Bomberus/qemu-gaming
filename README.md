@@ -1,6 +1,8 @@
 # qemu-gaming
 This is a small project I experimented with alot. With QEMU and KVM and a secound graphics card it is actually possible to play games in a virtual machine with almost the same performance like a native windows system.
 
+Please note this hole project is currently tested by me with some minor issues. If you have further questions about the procedures don't hesitate to contact me.
+
 ## Requirements
 * A CPU that supports [IOMMU](https://en.wikipedia.org/wiki/List_of_IOMMU-supporting_hardware)
 * Linux Kernel 4.4.x
