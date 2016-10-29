@@ -24,7 +24,7 @@ harddrives=("/mnt/data/vm/games.qcow2") #"/mnt/data/vm/games.qcow2" "/mnt/window
 raw_drives=("/mnt/data/vm/windows.raw") #"/mnt/data/vm/windows7.raw"
 
 # Configuration 0 = no | 1 = yes
-use_hw_audio=1
+use_hw_audio=0
 max_cache=1000
 use_fallback=0
 SPICE_PORT=5555
@@ -148,6 +148,7 @@ add_gpu(){
 	args+=" -nographic"
 }
 
+
 add_initial_args(){
 	#If cache consumes more than 1 GB clean it !
 	if [ $(free -m | awk 'NR==2{print $6}') -gt ${max_cache} ]; then
@@ -192,7 +193,7 @@ start(){
 	else
 		add_gpu
 	fi
-	setup_network
+	#setup_network
 	start_samba
 	if [ $use_hw_audio -eq 0 ]; then
 		export QEMU_AUDIO_DRV="pa"
@@ -220,12 +221,42 @@ start(){
 	echo 0 > /proc/sys/vm/nr_hugepages
 	usb_unbind
 	stop_samba
-	reset_network
+	#reset_network
 }
 
 if [[ $EUID -ne 0 ]]; then
 	echo ${red} This script must be run as root ${reset}
 	exit 1
 fi
-start
+
+
+menu(){
+	echo "Menu overview please press key"
+	echo "[1] Start VM"
+	echo "[2] Setup Network"
+	echo "[3] Kill Network"
+	echo "[4] Exit"
+
+	read -s -n 1 key
+
+	case "${key}" in
+		1)
+		start
+		;;
+		2)
+		setup_network
+		menu
+		;;
+		3)
+		reset_network
+		menu
+		;;
+		4)
+		exit 0
+		;;
+	esac
+}
+
+menu
+
 exit 0
