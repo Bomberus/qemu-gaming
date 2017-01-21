@@ -15,6 +15,27 @@ Pretty simple, all the necessary files are in the repository including their pro
 Don't forget the system config files in the folder etc. Some games might not work without these modifications (e.g. Battlefield).
 Please edit and configure the scripts to your liking.
 
+## If you want to permanently bind a device to the vfio-driver
+Edit the file `/etc/modprobe.d/vfio.conf` and input the id of the graphical card you want to use.
+
+```sh
+options vfio-pci ids=YOUR GPU ID
+```
+
+To retrieve the ID execute `lspci -nnk | grep VGA`. It will output something similiar like this:
+```bash
+00:02.0 VGA compatible controller [0300]: Intel Corporation HD Graphics 530 [8086:1912] (rev 06)
+01:00.0 VGA compatible controller [0300]: NVIDIA Corporation GK104 [GeForce GTX 670] [10de:1189] (rev a1)
+```
+
+For me the id is : `10de:1189`
+
+> Please note that you shouldn't use this method if you want to reuse your GPU in the linux environment. Use the GPU-Switcher instead.
+
+## Add support for hugetables
+
+Add `hugetlbfs       /dev/hugepages  hugetlbfs       mode=1770,gid=78        0 0` to /etc/fstab.
+
 ### GPU-Switcher
 A little tool to switch your graphics card driver. Please be careful because your XServer will be restarted to apply changes
 
